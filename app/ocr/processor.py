@@ -1,9 +1,10 @@
-#ocr/preprocessing.py
+## app/ocr/processor.py
+# -*- coding: utf-8 -*-
+# This file is part of the Tesseract OCR Invoice Processor project.
 
 import os
 import traceback
 import cv2
-import json
 import numpy as np
 import pytesseract
 from flask import jsonify
@@ -44,7 +45,7 @@ def process_invoice_file(request, config):
 
     try:
         if file.filename.lower().endswith(".pdf"):
-            images = convert_from_path(filepath, poppler_path="C:\\poppler\\poppler-24.08.0\\Library\\bin")
+            images = convert_from_path(filepath) # poppler_path sudah dihapus, sangat baik!
         else:
             with Image.open(filepath) as img:
                 images = [img.copy()]  # salinan aman
@@ -118,26 +119,6 @@ def process_invoice_file(request, config):
                 )
 
             hasil_semua_halaman.append(hasil_halaman)
-
-            # Simpan debug JSON dan TXT
-            debug_dir = os.path.join(config['UPLOAD_FOLDER'], "debug")
-            os.makedirs(debug_dir, exist_ok=True)
-            json_path = os.path.join(
-                debug_dir, f"{os.path.splitext(file.filename)[0]}_hal_{halaman_ke}.json"
-            )
-            txt_path = os.path.join(debug_dir, f"debug_page_{halaman_ke}.txt")
-
-            with open(json_path, "w", encoding="utf-8") as f:
-                json.dump(hasil_halaman, f, ensure_ascii=False, indent=2)
-            with open(txt_path, "w", encoding="utf-8") as f:
-                f.write(raw_text)
-
-            print(
-                f"[✅ HALAMAN {halaman_ke}] Faktur: {no_faktur} | DPP: {dpp_str} | PPN: {ppn_str}"
-            )
-
-            print("[DEBUG] Hasil halaman ke", halaman_ke)
-            print(json.dumps(hasil_semua_halaman[-1], indent=2, ensure_ascii=False))
 
         return (
             jsonify(

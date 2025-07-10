@@ -34,7 +34,7 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Copy .env file
-COPY . .env
+COPY .env .env
 
 # Install Python dependencies dan hapus build dependencies setelahnya
 RUN pip install --upgrade pip && \
@@ -50,4 +50,4 @@ COPY . .
 EXPOSE 5000
 
 # Jalankan app (sesuaikan dengan nama file utama lo, misal app.py)
-CMD ["python", "run.py"]
+CMD ["python", "app/app.py"]

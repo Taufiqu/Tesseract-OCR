@@ -1,31 +1,31 @@
-# File: backend/app.py
+# ==============================================================================  
+# File: app/app.py  
+# Deskripsi: Entry point utama Flask, langsung bisa dijalankan dari Docker  
+# ==============================================================================
 
-# ==============================================================================
-# 1. Pustaka Standar Python
-# ==============================================================================
+# 1. Pustaka Standar
 import os
 
-# ==============================================================================
 # 2. Pustaka Pihak Ketiga
-# ==============================================================================
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
-# ==============================================================================
 # 3. Impor Lokal
-# ==============================================================================
-from .config import Config
+from app.config import Config
 from app.ocr.processor import process_invoice_file
+# from app.db.saver import save_invoice_data  # Uncomment kalo udah ada
+# from app.exporter.export_excel import generate_excel_export
+# from app.history.reader import get_history
+# from app.db.deleter import delete_faktur
+
+# ==============================================================================  
+# Inisialisasi Flask App  
 # ==============================================================================
-# INISIALISASI FLASK APP
-# ==============================================================================
+
 app = Flask(__name__)
 app.config.from_object(Config)
-db = SQLAlchemy()
-# ==============================================================================
-# KONFIGURASI APLIKASI
 
 # CORS
 CORS(app, origins=[
@@ -34,13 +34,18 @@ CORS(app, origins=[
     "https://dd06dd96dbdc.ngrok-free.app"
 ], supports_credentials=True)
 
-# DB & Migrations
+# Database & Migrasi
+db = SQLAlchemy()
 db.init_app(app)
 migrate = Migrate(app, db)
 
+# ==============================================================================  
+# ROUTES  
 # ==============================================================================
-# ROUTES - FAKTUR OCR SAJA (Tesseract)
-# ==============================================================================
+
+@app.route("/")
+def index():
+    return "Hello from Tesseract OCR container!"
 
 @app.route("/api/process", methods=["POST"])
 def process_file():
@@ -56,7 +61,7 @@ def save_data():
     try:
         if isinstance(data, list):
             for item in data:
-                save_invoice_data(item, db)
+                save_invoice_data(item, db)  # Pastikan fungsi ini di-import
             db.session.commit()
             return jsonify(message=f"{len(data)} faktur berhasil disimpan."), 201
         else:
@@ -73,28 +78,32 @@ def save_data():
         print(f"[❌ ERROR /api/save] {e}")
         return jsonify(error=f"Terjadi kesalahan di server: {e}"), 500
 
-@app.route("/api/export", methods=["GET"])
-def export_excel():
-    return generate_excel_export(db)
+# Optional routes — uncomment kalau udah siap
+# @app.route("/api/export", methods=["GET"])
+# def export_excel():
+#     return generate_excel_export(db)
 
-@app.route("/api/history", methods=["GET"])
-def route_get_history():
-    return get_history()
+# @app.route("/api/history", methods=["GET"])
+# def route_get_history():
+#     return get_history()
 
-@app.route("/api/delete/<string:jenis>/<int:id>", methods=["DELETE"])
-def route_delete_faktur(jenis, id):
-    return delete_faktur(jenis, id)
+# @app.route("/api/delete/<string:jenis>/<int:id>", methods=["DELETE"])
+# def route_delete_faktur(jenis, id):
+#     return delete_faktur(jenis, id)
 
 @app.route("/preview/<filename>")
 def serve_preview(filename):
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     return send_file(filepath, mimetype="image/jpeg")
 
+# ==============================================================================  
+# Entry Point Saat Dipanggil dari Docker  
 # ==============================================================================
-# MAIN ENTRY POINT
-# ==============================================================================
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
+
     port = int(os.environ.get("PORT", 5000))
+    print(f"🚀 Running Flask on http://0.0.0.0:{port}")
     app.run(host="0.0.0.0", port=port)

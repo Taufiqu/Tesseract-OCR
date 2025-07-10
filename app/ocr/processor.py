@@ -15,8 +15,7 @@ from extractor import (
     extract_npwp_nama_rekanan, extract_dpp,
     extract_ppn, extract_keterangan
 )
-from utils.file_utils import allowed_file
-from utils.helpers import simpan_preview_image
+from utils.file_utils import allowed_file, simpan_preview_image
 
 def preprocess_for_ocr(img):
     """Convert BGR → Grayscale + Adaptive Threshold (binarization)"""

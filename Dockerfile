@@ -50,4 +50,4 @@ COPY . .
 EXPOSE 5000
 
 # Jalankan app (sesuaikan dengan nama file utama lo, misal app.py)
-CMD ["python", "app/app.py"]
+CMD ["python","-m", "app.app"]

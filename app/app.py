@@ -16,7 +16,7 @@ from flask_migrate import Migrate
 # ==============================================================================
 # 3. Impor Lokal
 # ==============================================================================
-from config import Config
+from .config import Config
 from ocr.processor import process_invoice_file
 # ==============================================================================
 # INISIALISASI FLASK APP

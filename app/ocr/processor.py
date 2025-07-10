@@ -10,12 +10,12 @@ import pytesseract
 from flask import jsonify
 from pdf2image import convert_from_path
 from PIL import Image
-from extractor import (
+from app.extractor import (
     extract_faktur_tanggal, extract_jenis_pajak,
     extract_npwp_nama_rekanan, extract_dpp,
     extract_ppn, extract_keterangan
 )
-from utils.file_utils import allowed_file, simpan_preview_image
+from app.utils.file_utils import allowed_file, simpan_preview_image
 
 def preprocess_for_ocr(img):
     """Convert BGR → Grayscale + Adaptive Threshold (binarization)"""

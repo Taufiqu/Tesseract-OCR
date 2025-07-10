@@ -1,5 +1,5 @@
 import re
-from shared_utils.text_utils import clean_number, format_currency
+from utils.helpers import clean_number, format_currency
 
 def extract_dpp(raw_text):
     try:

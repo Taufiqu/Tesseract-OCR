@@ -30,6 +30,9 @@ WORKDIR /app
 # Copy requirements.txt dulu (buat cache layer)
 COPY requirements.txt .
 
+# Copy .env file
+COPY . .env
+
 # Install Python dependencies dan hapus build dependencies setelahnya
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt && \
@@ -44,4 +47,4 @@ COPY . .
 EXPOSE 5000
 
 # Jalankan app (sesuaikan dengan nama file utama lo, misal app.py)
-CMD ["python", "app.py"]
+CMD ["python", "run.py"]

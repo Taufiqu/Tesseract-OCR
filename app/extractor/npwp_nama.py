@@ -1,5 +1,5 @@
 import re
-from shared_utils.text_utils import clean_string
+from utils.helpers import clean_string
 
 def extract_npwp_nama_rekanan(blok_text):
     """

@@ -1,6 +1,6 @@
 import re
 from thefuzz import fuzz
-from utils.helpers import clean_string
+from app.utils.helpers import clean_string
 
 def extract_jenis_pajak(raw_text, pt_utama):
     print("[DEBUG] Mulai extract_jenis_pajak...")

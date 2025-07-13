@@ -31,7 +31,7 @@ app.config.from_object(Config)
 CORS(app, origins=[
     "http://localhost:3000",
     "https://proyek-pajak.vercel.app",
-    "https://dd06dd96dbdc.ngrok-free.app"
+    os.environ.get("FRONTEND_URL")
 ], supports_credentials=True)
 
 # Database & Migrasi

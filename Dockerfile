@@ -50,4 +50,6 @@ COPY . .
 EXPOSE 5000
 
 # Jalankan app (sesuaikan dengan nama file utama lo, misal app.py)
-CMD ["python","-m", "app.app"]
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "app.app:app"]
+# ==============================================================================
+# ENTRYPOINT

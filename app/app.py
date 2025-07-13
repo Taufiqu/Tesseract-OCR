@@ -39,6 +39,10 @@ db = SQLAlchemy()
 db.init_app(app)
 migrate = Migrate(app, db)
 
+# Inisialisasi database
+with app.app_context():
+    db.create_all()
+
 # ==============================================================================  
 # ROUTES  
 # ==============================================================================
@@ -101,9 +105,6 @@ def serve_preview(filename):
 # ==============================================================================
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-
     port = int(os.environ.get("PORT", 5000))
     print(f"🚀 Running Flask on http://0.0.0.0:{port}")
     app.run(host="0.0.0.0", port=port)

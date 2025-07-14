@@ -33,6 +33,8 @@ WORKDIR /app
 # Copy requirements.txt dulu (buat cache layer)
 COPY requirements.txt .
 
+COPY .env .
+
 # Install Python dependencies dan hapus build dependencies setelahnya
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt && \

@@ -53,6 +53,7 @@ def index():
 
 @app.route("/api/process", methods=["POST"])
 def process_file():
+    print("🚀 Route /api/process terpanggil")
     return process_invoice_file(request, app.config)
 
 @app.route("/preview/<filename>")
